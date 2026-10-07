@@ -4,11 +4,38 @@
     pxt schema update app.py vault
     pxt service run app.py vault
 """
+import pixeltable as pxt
+import pixeltable.functions as pxtf
 from pixeltable.serving import FastAPIRouter
 
-from models import TableModel, Webhooks  # noqa: F401  (TableModel lets `pxt schema` find the models)
-from queries import deliveries_for
+from udfs import digest_payload, sign_payload, target_host
 
+# ---- tables ----
+TableModel = pxt.model_base()
+
+
+class Webhooks(TableModel, name='webhooks'):
+    id = pxt.Column(value=pxtf.uuid.uuid7(), primary_key=True)
+    name: pxt.String
+    url: pxt.String
+    event: pxt.String
+    payload: pxt.String
+
+    host = target_host(url)
+    digest = digest_payload(payload)
+    signature = sign_payload(event, payload)
+
+
+# ---- queries ----
+@pxt.query
+def deliveries_for(event: str):
+    """Signed deliveries for one event type."""
+    return Webhooks.where(Webhooks.event == event).select(
+        Webhooks.id, Webhooks.name, Webhooks.host, Webhooks.signature
+    ).order_by(Webhooks.name)
+
+
+# ---- routes ----
 vault_api = FastAPIRouter(name='vault_api')
 vault_api.add_insert_route(
     Webhooks, path='/webhooks',
