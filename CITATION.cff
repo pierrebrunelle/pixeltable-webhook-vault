@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use or adapt this example app, please cite it using these metadata."
+type: software
+title: "Webhook Vault API built with Pixeltable"
+abstract: "Webhook registry API that HMAC-signs payloads with a secret from the environment, as computed columns."
+authors:
+  - given-names: "Pierre"
+    family-names: "Brunelle"
+repository-code: "https://github.com/pierrebrunelle/pixeltable-webhook-vault"
+url: "https://pierrebrunelle.github.io/awesome-pixeltable-apps/"
+license: Apache-2.0
+version: "0.1.0"
+date-released: 2026-10-07
+keywords:
+  - "pixeltable"
+  - "pixeltable-example"
+  - "python"
+  - "secrets-management"
+  - "webhooks"
+  - "hmac"
+  - "configuration"
+  - "fastapi"
+  - "multimodal"
+  - "ai"
